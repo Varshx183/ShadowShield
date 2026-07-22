@@ -1,0 +1,14 @@
+node_modules/
+*.zip
+.DS_Store
+*.log
+.env
+.env.*
+*.pem
+*.key
+secrets.json
+*token*.txt
+*credential*
+node_modules/
+v*.zip
+dist/

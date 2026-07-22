@@ -1,0 +1,8 @@
+# Semgrep ignore patterns.
+#
+# demo/phishing-demo.html is DELIBERATELY built to imitate insecure
+# phishing-page patterns (missing CSRF token, credential form, etc.) — it
+# exists specifically so ShadowShield's own detection engine has something
+# real to catch and block. "Fixing" its intentional insecurities would
+# defeat its purpose. See the file's own header comment for details.
+demo/phishing-demo.html

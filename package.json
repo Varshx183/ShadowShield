@@ -1,0 +1,25 @@
+{
+  "name": "shadowshield",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-assisted, real-time protection against phishing, cloned login pages, lookalike domains, and scam sites \u2014 a Chrome extension (Manifest V3).",
+  "scripts": {
+    "test": "node tests/run-tests.js",
+    "test:backend": "cd backend && npm install --no-audit --no-fund && npm test",
+    "semantic-release": "semantic-release",
+    "build:store": "node scripts/build-store-package.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Varshx183/ShadowShield.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "semantic-release": "^24.2.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.1",
+    "conventional-changelog-conventionalcommits": "^8.0.0"
+  }
+}
