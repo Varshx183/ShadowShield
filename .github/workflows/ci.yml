@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+        with:
+          node-version: 20
+
+      - name: Extension test suite
+        run: node tests/run-tests.js
+
+      - name: Backend test suite
+        run: |
+          cd backend
+          npm install --no-audit --no-fund
+          npm test
+
+      - name: Semgrep (project ruleset)
+        run: |
+          python3 -m pip install semgrep --quiet
+          semgrep --config=.semgrep/rules.yml --severity=ERROR --severity=WARNING \
+            --error --exclude=node_modules --exclude=.git .

@@ -75,8 +75,15 @@
       <option value="anthropic">Anthropic — Claude (console.anthropic.com)</option>
       <option value="openai">OpenAI — GPT (platform.openai.com)</option>
       <option value="gemini">Google — Gemini (aistudio.google.com)</option>
+      <option value="custom">Other provider (OpenAI-compatible: Groq, DeepSeek, Mistral, OpenRouter, Ollama…)</option>
     </select>
     <input type="password" id="apiKey" placeholder="Paste your API key">
+    <div id="customFields" style="display:none;margin-top:10px">
+      <input type="text" id="aiBaseUrl" placeholder="Base URL, e.g. https://api.groq.com/openai/v1" style="margin-bottom:10px">
+      <input type="text" id="aiModel" placeholder="Model name, e.g. llama-3.1-8b-instant">
+      <p class="hint" style="margin-top:8px">Works with any service that speaks the OpenAI chat-completions API — including a local
+      Ollama server (base URL <code>http://localhost:11434/v1</code>, any key text).</p>
+    </div>
     <label style="margin-top:10px"><input type="checkbox" id="autoAI"> Automatically analyze suspicious pages</label>
   </section>
 

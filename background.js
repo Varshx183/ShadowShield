@@ -428,7 +428,8 @@ async function getDomainAge(domain) {
 // Never reads form values, passwords, or keystrokes.
 
 async function runAI(tabId, { force = false } = {}) {
-  const { aiProvider = "anthropic" } = await chrome.storage.sync.get(["aiProvider"]);
+  const { aiProvider = "anthropic", aiBaseUrl = "", aiModel = "" } =
+    await chrome.storage.sync.get(["aiProvider", "aiBaseUrl", "aiModel"]);
   const { apiKey } = await chrome.storage.local.get("apiKey");
   if (!apiKey) return { error: "No API key set. Add one in ShadowShield settings." };
 
@@ -471,7 +472,7 @@ ${payload.textSample}
 Respond ONLY with JSON: {"risk": <0-100>, "verdict": "safe"|"caution"|"danger", "reason": "<one sentence>"}`;
 
   try {
-    const text = await callProvider(aiProvider, apiKey, prompt);
+    const text = await callProvider(aiProvider, apiKey, prompt, { baseUrl: aiBaseUrl, model: aiModel });
     const parsed = sanitizeAiVerdict(JSON.parse(text.replace(/```json|```/g, "").trim()));
     if (!parsed) return { error: "AI returned an unexpected response" };
     parsed.ts = Date.now();
@@ -491,10 +492,19 @@ Respond ONLY with JSON: {"risk": <0-100>, "verdict": "safe"|"caution"|"danger", 
 // from a data-exfiltration or remote-code vector, and it is the single
 // feature most likely to fail Chrome Web Store review. Every destination the
 // extension can now reach is a hardcoded constant below.
-async function callProvider(provider, apiKey, prompt) {
-  if (provider === "openai") {
-    const base = "https://api.openai.com/v1";
-    const model = "gpt-4o-mini";
+async function callProvider(provider, apiKey, prompt, extra = {}) {
+  // OpenAI and every OpenAI-compatible service share one code path — that's
+  // what lets ShadowShield work with essentially any AI provider, including
+  // a model running locally via Ollama.
+  if (provider === "openai" || provider === "custom") {
+    let base = "https://api.openai.com/v1";
+    let model = "gpt-4o-mini";
+    if (provider === "custom") {
+      base = (extra.baseUrl || "").replace(/\/+$/, "");
+      model = extra.model || "";
+      if (!base) throw new Error("Set the provider's base URL in ShadowShield settings");
+      if (!model) throw new Error("Set a model name in ShadowShield settings");
+    }
     const res = await fetch(base + "/chat/completions", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": "Bearer " + apiKey },

@@ -1,5 +1,6 @@
 const DEFAULTS = { enabled: true, feedEnabled: true, autoAI: true,
-                   sensitivity: "balanced", allowlist: [], aiProvider: "anthropic" };
+                   sensitivity: "balanced", allowlist: [], aiProvider: "anthropic",
+                   aiBaseUrl: "", aiModel: "" };
 
 init();
 
@@ -13,6 +14,14 @@ async function init() {
   document.getElementById("sensitivity").value = s.sensitivity;
   document.getElementById("aiProvider").value = s.aiProvider;
   document.getElementById("apiKey").value = s.apiKey;
+  document.getElementById("aiBaseUrl").value = s.aiBaseUrl;
+  document.getElementById("aiModel").value = s.aiModel;
+  const syncCustom = () => {
+    document.getElementById("customFields").style.display =
+      document.getElementById("aiProvider").value === "custom" ? "block" : "none";
+  };
+  document.getElementById("aiProvider").addEventListener("change", syncCustom);
+  syncCustom();
   renderAllowlist(s.allowlist);
   renderFeedStatus();
   document.getElementById("save").addEventListener("click", save);
@@ -66,7 +75,9 @@ async function save() {
     feedEnabled: document.getElementById("feedEnabled").checked,
     autoAI: document.getElementById("autoAI").checked,
     sensitivity: document.getElementById("sensitivity").value,
-    aiProvider: document.getElementById("aiProvider").value
+    aiProvider: document.getElementById("aiProvider").value,
+    aiBaseUrl: document.getElementById("aiBaseUrl").value.trim(),
+    aiModel: document.getElementById("aiModel").value.trim()
   });
   // API key stored locally only, kept out of sync storage.
   await chrome.storage.local.set({ apiKey: document.getElementById("apiKey").value.trim() });
