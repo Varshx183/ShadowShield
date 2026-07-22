@@ -1,5 +1,15 @@
 # Changelog
 
+All notable changes to ShadowShield are documented here. This project uses [Semantic Versioning](https://semver.org/) and releases are generated automatically via [semantic-release](https://semantic-release.gitbook.io/) based on [Conventional Commits](https://www.conventionalcommits.org/).
+
+## 1.0.0 (2026-07-22)
+
+### Features
+
+* restore any-provider AI support and add CI/release workflows ([dd691d8](https://github.com/Varshx183/ShadowShield/commit/dd691d8fed04a9d975b86a9f551b5afccd6fb9eb))
+
+# Changelog
+
 All notable changes to ShadowShield are documented here. This project uses
 [Semantic Versioning](https://semver.org/) and releases are generated
 automatically via [semantic-release](https://semantic-release.gitbook.io/)

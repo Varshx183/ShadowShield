@@ -2,7 +2,7 @@
   "name": "shadowshield",
   "version": "1.0.0",
   "private": true,
-  "description": "AI-assisted, real-time protection against phishing, cloned login pages, lookalike domains, and scam sites \u2014 a Chrome extension (Manifest V3).",
+  "description": "AI-assisted, real-time protection against phishing, cloned login pages, lookalike domains, and scam sites — a Chrome extension (Manifest V3).",
   "scripts": {
     "test": "node tests/run-tests.js",
     "test:backend": "cd backend && npm install --no-audit --no-fund && npm test",

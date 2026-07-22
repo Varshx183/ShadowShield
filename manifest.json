@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "ShadowShield \u2014 Real-Time Phishing & Scam Protection",
+  "name": "ShadowShield — Real-Time Phishing & Scam Protection",
   "version": "1.0.0",
-  "description": "AI-assisted protection against phishing, cloned login pages, lookalike domains and scam sites \u2014 with a live threat feed.",
+  "description": "AI-assisted protection against phishing, cloned login pages, lookalike domains and scam sites — with a live threat feed.",
   "author": "Varshith Reddy",
   "homepage_url": "https://github.com/Varshx183/ShadowShield",
   "permissions": [
