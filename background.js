@@ -1,8 +1,3 @@
-// ShadowShield v2.2 service worker.
-// Feed subsystem: three sources, full-URL matching, 45-minute refresh,
-// network-layer blocking via declarativeNetRequest. Plus session-persistent
-// state, badge, auto-AI analysis, stats.
-
 const tabResults = new Map();        // tabId -> latest result (memory cache)
 const sessionBypass = new Set();     // hostnames the user chose to proceed to
 const aiCache = new Map();           // hostname -> AI verdict cache
@@ -120,10 +115,6 @@ async function refreshFeeds() {
 }
 
 // ----------------------------------------- network-layer blocking (DNR)
-// Rules are enforced by the browser's network stack itself: the request to a
-// listed URL never leaves the machine, and blocking works even while this
-// service worker is asleep. Each rule redirects straight to our warning page
-// with the details baked in.
 
 function sanitizeForFilter(path) {
   // *, ^ and | are urlFilter metacharacters — cut the path at the first one.
@@ -484,14 +475,7 @@ Respond ONLY with JSON: {"risk": <0-100>, "verdict": "safe"|"caution"|"danger", 
 }
 
 // One cheap, fast model per provider — the task is simple classification.
-//
-// Only three named, fixed endpoints are supported. An earlier version also
-// accepted a user-supplied base URL (any OpenAI-compatible service, incl. a
-// local Ollama). That was removed deliberately: sending page content to an
-// arbitrary user-specified endpoint is indistinguishable, from the outside,
-// from a data-exfiltration or remote-code vector, and it is the single
-// feature most likely to fail Chrome Web Store review. Every destination the
-// extension can now reach is a hardcoded constant below.
+
 async function callProvider(provider, apiKey, prompt, extra = {}) {
   // OpenAI and every OpenAI-compatible service share one code path — that's
   // what lets ShadowShield work with essentially any AI provider, including
